@@ -1,0 +1,114 @@
+@import './variables.less';
+body,
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+#app {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.spy-content {
+  width: 100%;
+  height: 100%;
+  background-color: #333;
+}
+
+.spy-controller {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  padding: 0 8px;
+
+  @media screen and (min-width: 640px) {
+    padding: 0 16px;
+  }
+
+  @media screen and (min-width: 1200px) {
+    padding: 0 32px;
+  }
+
+  &--logo {
+    position: relative;
+    min-width: 128px;
+    &::before {
+      top: 50%;
+      transform: translateY(-50%);
+      position: absolute;
+      content: '';
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: @basic-white;
+  
+    }
+   
+    cursor: pointer;
+  }
+  &--content {
+    flex: 1;
+    // margin: 0 32px;
+    max-width: 50%;
+    min-width: 256px;
+    border-radius: 4px;
+    height: 8px;
+    background-color: @basic-white;
+    cursor: pointer;
+    margin: auto;
+  }
+  &--actions {
+    padding: 0 8px;
+    display: flex;
+    flex-wrap: wrap;
+
+  }
+  &--icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: @basic-white;
+    margin: 0 8px;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+
+    &:first-child {
+      margin-left: -8px;
+    }
+    &:last-child {
+      margin-right: -8px;
+    }
+  }
+
+
+  &__wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    min-height: 64px;
+    width: 100%;
+    display: flex;
+    background-color: @basic-black;
+  }
+}
+
+.spy-icon {
+  font-size: 16px;
+  color: @basic-grey;
+  align-self: center;
+}
