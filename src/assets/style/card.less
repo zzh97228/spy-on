@@ -1,0 +1,23 @@
+@import './variables.less';
+.spy-card {
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  color: @basic-white;
+  border-top: 2px solid @basic-white;
+  position: absolute;
+  z-index: 10;
+  min-width: 128px;
+  transform: translate(-50%, -50%);
+
+  &-title {
+    font-size: 2rem;
+    font-weight: 600;
+    padding: 4px 8px;
+  }
+
+  &-content {
+    padding: 4px 8px;
+    margin-top: -4px;
+  }
+}
