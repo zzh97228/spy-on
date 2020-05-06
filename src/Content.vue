@@ -32,17 +32,14 @@ export default {
         transform: `translateX(${state.moveX}px)`
       }
     })
-    const windowWidth = computed(() => {
-      if (typeof window === 'undefined') return 0
-      return window.innerWidth
-    })
 
     function move(toLeft = false) {
       if (!state.contentEl) return
       
       const elWidth = state.contentEl.offsetWidth
+      const windowWidth = window.innerWidth || document.documentElement.offsetWidth
       const stepLength = +props.stepLength
-      const isLessBoundary = toLeft ? state.moveX < 0 : (windowWidth.value -state.moveX) < elWidth
+      const isLessBoundary = toLeft ? state.moveX < 0 : (windowWidth -state.moveX) < elWidth
       if (state.atRightBoundary && isLessBoundary) {
         state.moveX = state.moveX - stepLength
 
@@ -109,18 +106,23 @@ export default {
       this.state.atRightBoundary = false
       console.log('mouseleave')
     },
+    resize() {
+
+    },
     addEventListner() {
       const el = this.$refs['content']
       this.state.contentEl = el;
       on(el, 'mouseenter', this.onMouseEnter )
       on(el, 'mousemove', this.onMouseMove)
       on(el, 'mouseleave', this.onMouseLeave)
+      on(window, 'resize', this.resize)
     },
     removeEventListner() {
       const el = this.$refs['content']
       off(el, 'mouseenter', this.onMouseEnter )
       off(el, 'mousemove', this.onMouseMove)
       off(el, 'mouseleave', this.onMouseLeave)
+      off(window, 'resize', this.resize)
 
     }
   }
