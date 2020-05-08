@@ -1,13 +1,30 @@
 <template>
   <main class="spy-content" ref="content" :style="mainStyle">
-    <spy-card top="50%" left="50%"></spy-card>
+    <img class="spy-content__image" :src="red" />
+    <img class="spy-content__image" :src="yellow" />
+    <img class="spy-content__image" :src="red" />
+    <img class="spy-content__image" :src="yellow" />
+    <img class="spy-content__image" :src="red" />
+
+    <spy-card
+      v-for="(pos, i) in positions"
+      :key="i"
+      :top="pos.top"
+      :left="pos.left"
+      :content-width="state.elWidth"
+      :left-boundary="state.leftBoundary"
+      :right-boundary="state.rightBoundary"
+    ></spy-card>
   </main>
 </template>
 
 <script>
-import { computed, watch, reactive } from 'vue'
+import red from './assets/red.png'
+import yellow from './assets/yellow.png'
+import { computed, watch, reactive, onMounted } from 'vue'
 import SpyCard from './components/SpyCard';
-import { on, off } from './helpers'
+import { on, off, clamp } from './helpers'
+const positions = Array.from(new Array(20), () => ({left: Math.random() * 100, top: Math.random() * 100}))
 export default {
   name: 'spy-content',
   props: {
@@ -19,13 +36,25 @@ export default {
   components: {
     SpyCard
   },
-  setup(props) {
+  data() {
+    return {
+      red,
+      yellow,
+      positions
+    }
+  },
+  setup(props, { emit }) {
     const state = reactive({
       contentEl: null,
       x: 0,
+      leftBoundary: 0,
+      rightBoundary: 0,
       atLeftBoundary: false,
       atRightBoundary: false,
-      moveX: 0
+      moveX: 0,
+      left: 0,
+      percent: 0,
+      elWidth: 0
     })
     const mainStyle = computed(() => {
       return {
@@ -36,13 +65,15 @@ export default {
     function move(toLeft = false) {
       if (!state.contentEl) return
       
-      const elWidth = state.contentEl.offsetWidth
+      const elWidth =state.elWidth = state.contentEl.offsetWidth
+      state.left = state.contentEl.getBoundingClientRect().left;
+
       const windowWidth = window.innerWidth || document.documentElement.offsetWidth
       const stepLength = +props.stepLength
       const isLessBoundary = toLeft ? state.moveX < 0 : (windowWidth -state.moveX) < elWidth
+      
       if (state.atRightBoundary && isLessBoundary) {
         state.moveX = state.moveX - stepLength
-
         requestAnimationFrame(() => {
           move(toLeft)
         })
@@ -53,6 +84,17 @@ export default {
         })
       }
     }
+    function setPercentAndBoundary(left) {
+      if (!state.contentEl) return
+      const elWidth = state.elWidth
+      const windowWidth = window.innerWidth || document.documentElement.offsetWidth
+
+      state.percent = clamp(Math.round(Math.abs((left / (4 * elWidth / 5)) * 100)), 0 , 100)
+      state.leftBoundary = Math.abs(left) / state.contentEl.offsetWidth * 100
+      state.rightBoundary = (Math.abs(left) + windowWidth) / state.contentEl.offsetWidth * 100
+      emit('update:left', { left, leftBoundary: state.leftBoundary, rightBoundary: state.rightBoundary })
+
+    }
 
     watch(() => state.x, () => {
       if (state.atLeftBoundary === true) {
@@ -60,11 +102,22 @@ export default {
           move(true)
         })
       } else if (state.atRightBoundary === true) {
-        // console.log(val)
         requestAnimationFrame(()=> {
           move()
         })
       }
+    })
+    watch(() => state.left, (left) => {
+      setPercentAndBoundary(left)
+    })
+    watch(() => state.percent, (val) => {
+      emit('update:percent', val)
+    })
+
+    onMounted(() => {
+        if (!state.contentEl) return
+        state.left = state.contentEl.getBoundingClientRect().left
+        setPercentAndBoundary(state.left)
     })
     return {
       mainStyle,

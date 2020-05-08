@@ -1,6 +1,6 @@
 <template>
   <teleport to="#app">
-    <div class="spy-card" :style="{...cardStyle}">
+    <div v-show="canShow" class="spy-card" :style="{...cardStyle}">
       <div class="spy-card-title">
         <slot v-if="$slots.title" name="title"></slot>
         <template v-else>TITLE</template>
@@ -21,25 +21,59 @@
 </template>
 
 <script>
-import { PositionComposition, SizeComposition } from '../composables'
-import { computed } from 'vue';
+import { SizeComposition } from '../composables'
+import { computed, reactive, watch, toRef, ref, onMounted } from 'vue';
+import { clamp } from '../helpers'
 export default {
   name: 'SpyCard',
   props: {
-    ...PositionComposition.positionProps,
+    leftBoundary: Number,
+    rightBoundary: Number,
+    contentWidth: Number,
+    left: [Number, String],
+    top: [Number, String],
+    onHover: {
+      type: Boolean,
+      default: true
+    },
     ...SizeComposition.sizeProps
   },
   setup(props) {
-    const { stlye: posStyle } = PositionComposition.usePosition(props);
+    const state = reactive({
+      left: isNaN(props.left) ? 0 : clamp(+props.left, 0, 100),
+      top: isNaN(props.top) ? 0 : clamp(+props.top, 0, 100),
+    })
+    const currentLeft = ref(0)
+    const leftBoundary = toRef(props, 'leftBoundary');
+    const rightBoundary = toRef(props, 'rightBoundary');
+    
+    const canShow = computed(() => leftBoundary.value < state.left && state.left < rightBoundary.value)
+    
+    function setCurrentLeft(leftBoundary) {
+      const windowWidth = window.innerWidth || document.documentElement.offsetWidth
+      currentLeft.value = (state.left - leftBoundary) * props.contentWidth / windowWidth
+    }
+    
+    watch([leftBoundary, rightBoundary], ([leftB, rightB]) => {
+      if (props.onHover && leftB < state.left && state.left < rightB) {
+        setCurrentLeft(leftB)
+      }
+    })
     const { style: sizeStyle } = SizeComposition.useSize(props) 
     const cardStyle = computed(() => {
       return {
-        ...posStyle.value,
-        ...sizeStyle.value
+        ...sizeStyle.value,
+        left: `${currentLeft.value}%`,
+        top: `${state.top}%`
       }
     })
+    onMounted(() => {
+        setCurrentLeft(leftBoundary.value)
+    })
     return {
-      cardStyle
+      cardStyle,
+      state,
+      canShow
     }
   }
 }

@@ -1,8 +1,8 @@
 <template>
   <div id="app" data-app="true">
     <spy-mask></spy-mask>
-    <spy-content></spy-content>
-    <spy-controller></spy-controller>
+    <spy-content v-on:update:percent="updatePercent" v-on:update:left="updateLeft"></spy-content>
+    <spy-controller :percent="percent"></spy-controller>
   </div>
 </template>
 
@@ -16,6 +16,18 @@ export default {
     SpyMask,
     SpyController,
     SpyContent
+  },
+  data() {
+    return {
+      percent: 0
+    }
+  },
+  methods: {
+    updatePercent(val) {
+      this.percent = val
+    },
+    updateLeft() {
+    }
   }
 };
 </script>
