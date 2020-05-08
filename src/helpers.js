@@ -8,8 +8,10 @@ export function on(el, eventName, callback = () => {}, options = false) {
   el.addEventListener(eventName, callback, options);
 }
 
-
 export function off(el, eventName, callback = () => {}, options = false) {
   el.removeEventListener(eventName, callback, options);
 }
 
+export function clamp(num, min, max) {
+  return Math.max(Math.min(num, max), min);
+}
