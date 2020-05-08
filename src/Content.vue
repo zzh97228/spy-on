@@ -1,5 +1,12 @@
 <template>
   <main class="spy-content" ref="content" :style="mainStyle">
+    <teleport to="#app">
+      <div class="spy-content__activator left" ref="leftActivator"></div>
+    </teleport>
+    <teleport to="#app">
+      <div class="spy-content__activator right" ref="rightActivator"></div>
+    </teleport>
+
     <img class="spy-content__image" :src="red" />
     <img class="spy-content__image" :src="yellow" />
     <img class="spy-content__image" :src="red" />
@@ -30,7 +37,7 @@ export default {
   props: {
     stepLength: {
       type: [String, Number],
-      default: 0.5
+      default: 5
     }
   },
   components: {
@@ -131,50 +138,84 @@ export default {
     this.removeEventListner()
   },
   methods: {
-    onMouseEnter() {
-      console.log('mouseenter')
+    setAtBoundary(left = false, right = false) {
+      this.state.atLeftBoundary = left
+      this.state.atRightBoundary = right
     },
-    onMouseMove(e) {
+    onMouseEnter(e) {
       const x = e.clientX;
+
       const windowWidth = window.innerWidth || document.documentElement.offsetWidth
       const leftBoundary = windowWidth * 0.1;
       const rightBoundary = windowWidth * 0.9;
       
       if (x < leftBoundary) {
         this.state.x = x
-        this.state.atLeftBoundary = true
-        this.state.atRightBoundary = false
+        this.setAtBoundary(true, false)
 
       } else if (x > rightBoundary) {
-        this.state.atRightBoundary = true
-        this.state.atLeftBoundary = false
+        this.setAtBoundary(false, true)
         this.state.x = x
       } else {
-        this.state.atLeftBoundary = false
-        this.state.atRightBoundary = false
+        this.setAtBoundary(false, false)
       }
+
+    },
+    onMouseMove() {
+      // const x = e.clientX;
+      // const windowWidth = window.innerWidth || document.documentElement.offsetWidth
+      // const leftBoundary = windowWidth * 0.1;
+      // const rightBoundary = windowWidth * 0.9;
+      
+      // if (x < leftBoundary) {
+      //   this.state.x = x
+      //   this.state.atLeftBoundary = true
+      //   this.state.atRightBoundary = false
+
+      // } else if (x > rightBoundary) {
+      //   this.state.atRightBoundary = true
+      //   this.state.atLeftBoundary = false
+      //   this.state.x = x
+      // } else {
+      //   this.state.atLeftBoundary = false
+      //   this.state.atRightBoundary = false
+      // }
     },
     onMouseLeave() {
-      this.state.atLeftBoundary = false
-      this.state.atRightBoundary = false
-      console.log('mouseleave')
+      this.setAtBoundary(false, false)
     },
     resize() {
 
     },
     addEventListner() {
       const el = this.$refs['content']
+      const left = this.$refs['leftActivator']
+      const right = this.$refs['rightActivator']
+
       this.state.contentEl = el;
-      on(el, 'mouseenter', this.onMouseEnter )
-      on(el, 'mousemove', this.onMouseMove)
-      on(el, 'mouseleave', this.onMouseLeave)
+      // on(el, 'mouseenter', this.onMouseEnter )
+      // on(el, 'mousemove', this.onMouseMove)
+      // on(el, 'mouseleave', this.onMouseLeave)
+      on(left, 'mouseenter', this.onMouseEnter )
+      on(left, 'mouseleave', this.onMouseLeave)
+      on(right, 'mouseenter', this.onMouseEnter )
+      on(right, 'mouseleave', this.onMouseLeave)
+
       on(window, 'resize', this.resize)
     },
     removeEventListner() {
-      const el = this.$refs['content']
-      off(el, 'mouseenter', this.onMouseEnter )
-      off(el, 'mousemove', this.onMouseMove)
-      off(el, 'mouseleave', this.onMouseLeave)
+      // const el = this.$refs['content']
+      // off(el, 'mouseenter', this.onMouseEnter )
+      // off(el, 'mousemove', this.onMouseMove)
+      // off(el, 'mouseleave', this.onMouseLeave)
+      const left = this.$refs['leftActivator']
+      const right = this.$refs['rightActivator']
+
+      off(left, 'mouseenter', this.onMouseEnter )
+      off(left, 'mouseleave', this.onMouseLeave)
+      off(right, 'mouseenter', this.onMouseEnter )
+      off(right, 'mouseleave', this.onMouseLeave)
+
       off(window, 'resize', this.resize)
 
     }
