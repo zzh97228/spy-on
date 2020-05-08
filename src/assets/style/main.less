@@ -15,24 +15,40 @@ html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
+.clear {
+  clear: both;
+}
 
 #app {
   height: 100%;
-  width: 100%;
-  max-width: 100%;
+  min-width: 100%;
   overflow: hidden;
   position: relative;
 }
 
 .spy-content {
-  min-width: 100%;
   overflow: hidden;
-  width: 4096px;
-  height: 100%;
-  top: 0;
-  bottom: 0;
   position: absolute;
-  background: linear-gradient(to right, red, orange, yellow,green,cyan,blue,purple,black);
+  top: 0;
+  left: 0;
+  min-width: 100vw;
+  display: flex;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    red,
+    orange,
+    yellow,
+    green,
+    cyan,
+    blue,
+    purple,
+    black
+  );
+
+  &__image {
+    height: 100%;
+  }
 }
 
 .spy-controller {
@@ -63,9 +79,8 @@ html {
       height: 32px;
       border-radius: 50%;
       background-color: @basic-white;
-  
     }
-   
+
     cursor: pointer;
   }
   &--content {
@@ -78,12 +93,22 @@ html {
     background-color: @basic-white;
     cursor: pointer;
     margin: auto;
+    position: relative;
   }
+
+  &--fill {
+    border-radius: 4px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background-color: #48ff00;
+  }
+
   &--actions {
     padding: 0 8px;
     display: flex;
     flex-wrap: wrap;
-
   }
   &--icon {
     width: 32px;
@@ -103,14 +128,14 @@ html {
     }
   }
 
-
   &__wrapper {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     min-height: 64px;
     width: 100%;
     display: flex;
+    z-index: 100;
     background-color: @basic-black;
   }
 }
