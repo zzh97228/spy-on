@@ -1,8 +1,12 @@
 <template>
   <div id="app" data-app="true">
     <spy-mask></spy-mask>
-    <spy-content v-on:update:percent="updatePercent" v-on:update:left="updateLeft"></spy-content>
-    <spy-controller :percent="percent"></spy-controller>
+    <spy-content
+      v-on:update:percent="updatePercent"
+      :percentage="percent"
+      v-on:update:left="updateLeft"
+    ></spy-content>
+    <spy-controller :percent="percent" v-on:update:internalPercent="updatePercent"></spy-controller>
   </div>
 </template>
 

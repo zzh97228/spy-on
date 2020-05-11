@@ -1,6 +1,7 @@
 <template>
   <teleport to="#app">
     <div v-show="canShow" class="spy-card" :style="{...cardStyle}">
+      <div class="spy-card-media"></div>
       <div class="spy-card-title">
         <slot v-if="$slots.title" name="title"></slot>
         <template v-else>TITLE</template>

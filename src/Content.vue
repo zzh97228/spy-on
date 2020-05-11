@@ -30,7 +30,7 @@ import red from './assets/red.png'
 import yellow from './assets/yellow.png'
 import { computed, watch, reactive, onMounted } from 'vue'
 import SpyCard from './components/SpyCard';
-import { on, off, clamp } from './helpers'
+import { on, off } from './helpers'
 const positions = Array.from(new Array(20), () => ({left: Math.random() * 100, top: Math.random() * 100}))
 export default {
   name: 'spy-content',
@@ -38,6 +38,10 @@ export default {
     stepLength: {
       type: [String, Number],
       default: 5
+    },
+    percentage: {
+      type: Number,
+      default: 0
     }
   },
   components: {
@@ -93,16 +97,26 @@ export default {
     }
     function setPercentAndBoundary(left) {
       if (!state.contentEl) return
-      const elWidth = state.elWidth
+      const elWidth = state.elWidth || state.contentEl.offsetWidth
       const windowWidth = window.innerWidth || document.documentElement.offsetWidth
 
-      state.percent = clamp(Math.round(Math.abs((left / (4 * elWidth / 5)) * 100)), 0 , 100)
+      state.percent = Math.round(Math.abs(left * 100 / (elWidth - windowWidth)))
       state.leftBoundary = Math.abs(left) / state.contentEl.offsetWidth * 100
       state.rightBoundary = (Math.abs(left) + windowWidth) / state.contentEl.offsetWidth * 100
       emit('update:left', { left, leftBoundary: state.leftBoundary, rightBoundary: state.rightBoundary })
 
     }
+    watch(() => props.percentage, (val) => {
+      if (val === state.percent) return
+      if (!state.contentEl) return
+      const windowWidth = window.innerWidth || document.documentElement.offsetWidth
 
+      state.moveX = Math.round(-(state.contentEl.offsetWidth - windowWidth) * val / 100)
+      requestAnimationFrame(()=> {
+      state.left = state.contentEl.getBoundingClientRect().left;
+      })
+
+    })
     watch(() => state.x, () => {
       if (state.atLeftBoundary === true) {
         requestAnimationFrame(()=> {
@@ -115,6 +129,7 @@ export default {
       }
     })
     watch(() => state.left, (left) => {
+
       setPercentAndBoundary(left)
     })
     watch(() => state.percent, (val) => {
