@@ -7,11 +7,11 @@
       <div class="spy-content__activator right" ref="rightActivator"></div>
     </teleport>
 
-    <img class="spy-content__image" :src="red" />
-    <img class="spy-content__image" :src="yellow" />
-    <img class="spy-content__image" :src="red" />
-    <img class="spy-content__image" :src="yellow" />
-    <img class="spy-content__image" :src="red" />
+    <img class="spy-content__image" :src="pic1" />
+    <img class="spy-content__image" :src="pic2" />
+    <img class="spy-content__image" :src="pic3" />
+    <img class="spy-content__image" :src="pic4" />
+    <img class="spy-content__image" :src="pic5" />
 
     <spy-card
       v-for="(pos, i) in positions"
@@ -26,8 +26,14 @@
 </template>
 
 <script>
-import red from './assets/red.png'
-import yellow from './assets/yellow.png'
+import pic1 from './assets/1.png';
+import pic2 from './assets/2.png';
+
+import pic3 from './assets/3.png';
+
+import pic4 from './assets/4.png';
+
+import pic5 from './assets/5.png';
 import { computed, watch, reactive, onMounted } from 'vue'
 import SpyCard from './components/SpyCard';
 import { on, off } from './helpers'
@@ -49,8 +55,11 @@ export default {
   },
   data() {
     return {
-      red,
-      yellow,
+      pic1,
+      pic2,
+      pic3,
+      pic4,
+      pic5,
       positions
     }
   },
