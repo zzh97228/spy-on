@@ -5,6 +5,7 @@
       v-on:update:percent="updatePercent"
       :percentage="percent"
       v-on:update:left="updateLeft"
+      v-on:loaded="onLoaded"
     ></spy-content>
     <spy-controller :percent="percent" v-on:update:internalPercent="updatePercent"></spy-controller>
   </div>
@@ -29,6 +30,9 @@ export default {
   methods: {
     updatePercent(val) {
       this.percent = val
+    },
+    onLoaded() {
+
     },
     updateLeft() {
     }

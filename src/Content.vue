@@ -7,11 +7,13 @@
       <div class="spy-content__activator right" ref="rightActivator"></div>
     </teleport>
 
-    <img class="spy-content__image" :src="pic1" />
-    <img class="spy-content__image" :src="pic2" />
-    <img class="spy-content__image" :src="pic3" />
-    <img class="spy-content__image" :src="pic4" />
-    <img class="spy-content__image" :src="pic5" />
+    <img
+      class="spy-content__image"
+      v-for="(item, i) in pictures"
+      :key="i"
+      :src="item"
+      v-on:load="onLoad(i)"
+    />
 
     <spy-card
       v-for="(pos, i) in positions"
@@ -26,14 +28,6 @@
 </template>
 
 <script>
-import pic1 from './assets/1.png';
-import pic2 from './assets/2.png';
-
-import pic3 from './assets/3.png';
-
-import pic4 from './assets/4.png';
-
-import pic5 from './assets/5.png';
 import { computed, watch, reactive, onMounted } from 'vue'
 import SpyCard from './components/SpyCard';
 import { on, off } from './helpers'
@@ -55,11 +49,15 @@ export default {
   },
   data() {
     return {
-      pic1,
-      pic2,
-      pic3,
-      pic4,
-      pic5,
+      pictures: [
+        'https://cdn.lagabu.com/factory/factory-1.png',
+        'https://cdn.lagabu.com/factory/factory-2.png',
+        'https://cdn.lagabu.com/factory/factory-3.png',
+        'https://cdn.lagabu.com/factory/factory-4.png',
+        'https://cdn.lagabu.com/factory/factory-5.png',
+
+      ],
+      pictureCounts: 0,
       positions
     }
   },
@@ -161,7 +159,18 @@ export default {
   beforeUnmount() {
     this.removeEventListner()
   },
+  watch: {
+    pictureCounts(val) {
+      const totalCount = ((this.pictures.length -1) * this.pictures.length) / 2
+      if (val === totalCount) {
+        this.$emit('loaded', val)
+      }
+    }
+  },
   methods: {
+    onLoad(idx) {
+      this.pictureCounts += idx
+    },
     setAtBoundary(left = false, right = false) {
       this.state.atLeftBoundary = left
       this.state.atRightBoundary = right
