@@ -25,6 +25,99 @@ html {
   min-width: 100%;
   overflow: hidden;
   position: relative;
+  background-color: #333;
+}
+
+.fade-opacity {
+  &-enter-active,
+  &-leave-active {
+    transition: 0.1s ease-out;
+  }
+
+  &-enter,
+  &-enter-active,
+  &-leave,
+  &-leave-active {
+    opacity: 0;
+  }
+
+  &-enter-to,
+  &-leave {
+    opacity: 1;
+  }
+}
+
+.fade-opacity-transform {
+  &-enter-active,
+  &-leave-active {
+    transition: 0.35s ease-in-out;
+  }
+
+  &-enter,
+  &-enter-active,
+  &-leave,
+  &-leave-active {
+    transform: translateX(-30%);
+    opacity: 0;
+  }
+
+  &-enter-to,
+  &-leave {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.spy-mask {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 99;
+  &__wrapper {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 64px);
+    background: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 36px;
+    font-weight: 100;
+    div {
+      width: 100%;
+      margin: 16px 0;
+    }
+  }
+  &-img {
+    min-height: 24px;
+    min-width: 24px;
+    width: auto !important;
+    background-color: white;
+  }
+
+  &-bar {
+    height: 6px;
+    width: 20% !important;
+    position: relative;
+    border-radius: 8px;
+    background-color: rgba(1, 1, 1, 0.2);
+
+    &--fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      border-radius: 8px;
+      background: #fff;
+      margin: 0 !important;
+      transition: width 0.2s;
+    }
+  }
 }
 
 .spy-content {
@@ -35,17 +128,17 @@ html {
   min-width: 100vw;
   display: flex;
   height: 100%;
-  background: linear-gradient(
-    to right,
-    red,
-    orange,
-    yellow,
-    green,
-    cyan,
-    blue,
-    purple,
-    black
-  );
+  // background: linear-gradient(
+  //   to right,
+  //   red,
+  //   orange,
+  //   yellow,
+  //   green,
+  //   cyan,
+  //   blue,
+  //   purple,
+  //   black
+  // );
 
   &__image {
     height: 100%;

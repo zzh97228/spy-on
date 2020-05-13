@@ -1,23 +1,34 @@
 <template>
   <teleport to="#app">
-    <div v-show="canShow" class="spy-card" :style="{...cardStyle}">
-      <div class="spy-card-media"></div>
-      <div class="spy-card-title">
-        <slot v-if="$slots.title" name="title"></slot>
-        <template v-else>TITLE</template>
-      </div>
-      <div class="spy-card-content">
-        <slot v-if="$slots.default"></slot>
-        <div v-else class="spy-row spy-row--align-center">
-          <div class="spy-default-avatar"></div>
-          <div class="spy-row spy-row--column">
-            <div class="spy-default-list-item"></div>
-            <div class="spy-default-list-item"></div>
-            <div class="spy-default-list-item"></div>
+    <transition name="fade-opacity">
+      <div
+        v-show="canShow"
+        class="spy-card"
+        @mouseenter="() => this.state.showContent = true"
+        @mouseleave="() => this.state.showContent = false"
+        :style="{...cardStyle}"
+      >
+        <div class="spy-card-media">
+          <div class="spy-card-media__wrapper">
+            <slot name="mediia"></slot>
           </div>
         </div>
+
+        <transition name="fade-opacity-transform">
+          <div v-show="state.showContent" class="spy-card-content">
+            <slot v-if="$slots.default"></slot>
+            <div v-else class="spy-row spy-row--align-center">
+              <div class="spy-default-avatar"></div>
+              <div class="spy-row spy-row--column">
+                <div class="spy-default-list-item"></div>
+                <div class="spy-default-list-item"></div>
+                <div class="spy-default-list-item"></div>
+              </div>
+            </div>
+          </div>
+        </transition>
       </div>
-    </div>
+    </transition>
   </teleport>
 </template>
 
@@ -43,12 +54,15 @@ export default {
     const state = reactive({
       left: isNaN(props.left) ? 0 : clamp(+props.left, 0, 100),
       top: isNaN(props.top) ? 0 : clamp(+props.top, 0, 100),
+      showContent: false
     })
     const currentLeft = ref(0)
     const leftBoundary = toRef(props, 'leftBoundary');
     const rightBoundary = toRef(props, 'rightBoundary');
     
-    const canShow = computed(() => leftBoundary.value < state.left && state.left < rightBoundary.value)
+    const canShow = computed(() => {
+      return leftBoundary.value < state.left && state.left < rightBoundary.value
+    })
     
     function setCurrentLeft(leftBoundary) {
       const windowWidth = window.innerWidth || document.documentElement.offsetWidth
@@ -68,13 +82,14 @@ export default {
         top: `${state.top}%`
       }
     })
+    
     onMounted(() => {
         setCurrentLeft(leftBoundary.value)
     })
     return {
       cardStyle,
       state,
-      canShow
+      canShow,
     }
   }
 }

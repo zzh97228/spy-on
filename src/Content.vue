@@ -12,7 +12,7 @@
       v-for="(item, i) in pictures"
       :key="i"
       :src="item"
-      v-on:load="onLoad(i)"
+      v-on:load="onLoad"
     />
 
     <spy-card
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { computed, watch, reactive, onMounted } from 'vue'
+import { computed, watch, reactive, onMounted, nextTick } from 'vue'
 import SpyCard from './components/SpyCard';
 import { on, off } from './helpers'
 const positions = Array.from(new Array(20), () => ({left: Math.random() * 100, top: Math.random() * 100}))
@@ -136,7 +136,6 @@ export default {
       }
     })
     watch(() => state.left, (left) => {
-
       setPercentAndBoundary(left)
     })
     watch(() => state.percent, (val) => {
@@ -144,9 +143,13 @@ export default {
     })
 
     onMounted(() => {
+      nextTick(() => {
         if (!state.contentEl) return
+        state.elWidth = state.contentEl.offsetWidth
         state.left = state.contentEl.getBoundingClientRect().left
         setPercentAndBoundary(state.left)
+
+      })
     })
     return {
       mainStyle,
@@ -161,15 +164,13 @@ export default {
   },
   watch: {
     pictureCounts(val) {
-      const totalCount = ((this.pictures.length -1) * this.pictures.length) / 2
-      if (val === totalCount) {
-        this.$emit('loaded', val)
-      }
+      const totalCount = this.pictures.length
+      this.$emit('loading', { value: val, totalCount })
     }
   },
   methods: {
-    onLoad(idx) {
-      this.pictureCounts += idx
+    onLoad() {
+      this.pictureCounts += 1
     },
     setAtBoundary(left = false, right = false) {
       this.state.atLeftBoundary = left

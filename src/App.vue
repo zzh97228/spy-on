@@ -1,11 +1,11 @@
 <template>
   <div id="app" data-app="true">
-    <spy-mask></spy-mask>
+    <spy-mask v-show="!loaded" :loading-percent="loadingPercent"></spy-mask>
     <spy-content
       v-on:update:percent="updatePercent"
       :percentage="percent"
       v-on:update:left="updateLeft"
-      v-on:loaded="onLoaded"
+      v-on:loading="onLoading"
     ></spy-content>
     <spy-controller :percent="percent" v-on:update:internalPercent="updatePercent"></spy-controller>
   </div>
@@ -24,15 +24,22 @@ export default {
   },
   data() {
     return {
-      percent: 0
+      percent: 0,
+      loadingPercent: 0,
+      loaded: false
     }
   },
   methods: {
     updatePercent(val) {
       this.percent = val
     },
-    onLoaded() {
-
+    onLoading({ value, totalCount }) {
+      this.loadingPercent = value * 100 / totalCount
+      if (value === totalCount) {
+        setTimeout(() => {
+          this.loaded = true
+        }, 2000)
+      }
     },
     updateLeft() {
     }
