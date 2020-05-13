@@ -42,7 +42,8 @@ export default {
     percentage: {
       type: Number,
       default: 0
-    }
+    },
+    disabled: Boolean
   },
   components: {
     SpyCard
@@ -177,6 +178,7 @@ export default {
       this.state.atRightBoundary = right
     },
     onMouseEnter(e) {
+      if (this.disabled) return
       const x = e.clientX;
 
       const windowWidth = window.innerWidth || document.documentElement.offsetWidth
@@ -216,6 +218,7 @@ export default {
       // }
     },
     onMouseLeave() {
+      if (this.disabled) return
       this.setAtBoundary(false, false)
     },
     resize() {

@@ -20,7 +20,8 @@ export default {
     percent: {
       type: Number,
       default: 0
-    }
+    },
+    disabled: Boolean
   },
   data() {
     return {
@@ -35,6 +36,7 @@ export default {
   },
   methods: {
     updateProgress(e) {
+      if (this.disabled) return
       const x = e.clientX
       const progress = this.$refs['progress'];
       const rect = progress.getBoundingClientRect();

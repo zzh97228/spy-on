@@ -6,8 +6,13 @@
       :percentage="percent"
       v-on:update:left="updateLeft"
       v-on:loading="onLoading"
+      :disabled="disabled"
     ></spy-content>
-    <spy-controller :percent="percent" v-on:update:internalPercent="updatePercent"></spy-controller>
+    <spy-controller
+      :disabled="disabled"
+      :percent="percent"
+      v-on:update:internalPercent="updatePercent"
+    ></spy-controller>
   </div>
 </template>
 
@@ -27,6 +32,11 @@ export default {
       percent: 0,
       loadingPercent: 0,
       loaded: false
+    }
+  },
+  computed: {
+    disabled() {
+      return !this.loaded
     }
   },
   methods: {
