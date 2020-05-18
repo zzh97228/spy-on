@@ -14,24 +14,30 @@
       :src="item"
       v-on:load="onLoad"
     />
-
     <spy-card
       v-for="(pos, i) in positions"
       :key="i"
       :top="pos.top"
       :left="pos.left"
+      :content-top="pos.contentTop"
+      :content-left="pos.contentLeft"
       :content-width="state.elWidth"
       :left-boundary="state.leftBoundary"
       :right-boundary="state.rightBoundary"
-    ></spy-card>
+    >
+      <keep-alive>
+        <component :is="pos.compo"></component>
+      </keep-alive>
+    </spy-card>
   </main>
 </template>
 
 <script>
-import { computed, watch, reactive, onMounted, nextTick } from 'vue'
+import { computed, watch, reactive } from 'vue'
 import SpyCard from './components/SpyCard';
-import { on, off } from './helpers'
-const positions = Array.from(new Array(20), () => ({left: Math.random() * 100, top: Math.random() * 100}))
+import { on, off, pos as positions } from './helpers'
+import * as details from './components/details';
+// const positions = Array.from(new Array(20), () => ({left: Math.random() * 100, top: Math.random() * 100}))
 export default {
   name: 'spy-content',
   props: {
@@ -46,7 +52,8 @@ export default {
     disabled: Boolean
   },
   components: {
-    SpyCard
+    SpyCard,
+    ...details
   },
   data() {
     return {
@@ -143,15 +150,22 @@ export default {
       emit('update:percent', val)
     })
 
-    onMounted(() => {
-      nextTick(() => {
+    watch(() => props.disabled, (val) => {
+      if (!val) {
         if (!state.contentEl) return
         state.elWidth = state.contentEl.offsetWidth
         state.left = state.contentEl.getBoundingClientRect().left
         setPercentAndBoundary(state.left)
-
-      })
+      }
     })
+    // onMounted(() => {
+    //   nextTick(() => {
+    //     if (!state.contentEl) return
+    //     state.elWidth = state.contentEl.offsetWidth
+    //     state.left = state.contentEl.getBoundingClientRect().left
+    //     setPercentAndBoundary(state.left)
+    //   })
+    // })
     return {
       mainStyle,
       state
@@ -178,7 +192,6 @@ export default {
       this.state.atRightBoundary = right
     },
     onMouseEnter(e) {
-      if (this.disabled) return
       const x = e.clientX;
 
       const windowWidth = window.innerWidth || document.documentElement.offsetWidth
@@ -218,8 +231,7 @@ export default {
       // }
     },
     onMouseLeave() {
-      if (this.disabled) return
-      this.setAtBoundary(false, false)
+       this.setAtBoundary(false, false)
     },
     resize() {
 

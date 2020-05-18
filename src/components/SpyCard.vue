@@ -10,19 +10,21 @@
       >
         <div class="spy-card-media">
           <div class="spy-card-media__wrapper">
-            <slot name="mediia"></slot>
+            <slot name="media"></slot>
           </div>
         </div>
 
         <transition name="fade-opacity-transform">
           <div v-show="state.showContent" class="spy-card-content">
-            <slot v-if="$slots.default"></slot>
-            <div v-else class="spy-row spy-row--align-center">
-              <div class="spy-default-avatar"></div>
-              <div class="spy-row spy-row--column">
-                <div class="spy-default-list-item"></div>
-                <div class="spy-default-list-item"></div>
-                <div class="spy-default-list-item"></div>
+            <div class="spy-card-content__wrapper" :style="{...contentStyle}">
+              <slot v-if="$slots.default"></slot>
+              <div v-else class="spy-row spy-row--align-center">
+                <div class="spy-default-avatar"></div>
+                <div class="spy-row spy-row--column">
+                  <div class="spy-default-list-item"></div>
+                  <div class="spy-default-list-item"></div>
+                  <div class="spy-default-list-item"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -35,7 +37,7 @@
 <script>
 import { SizeComposition } from '../composables'
 import { computed, reactive, watch, toRef, ref, onMounted } from 'vue';
-import { clamp } from '../helpers'
+import { clamp, convertToUnit } from '../helpers'
 export default {
   name: 'SpyCard',
   props: {
@@ -44,6 +46,8 @@ export default {
     contentWidth: Number,
     left: [Number, String],
     top: [Number, String],
+    contentTop: [Number, String],
+    contentLeft: [Number, String],
     onHover: {
       type: Boolean,
       default: true
@@ -82,12 +86,20 @@ export default {
         top: `${state.top}%`
       }
     })
+
+    const contentStyle = computed(() => {
+      return {
+        top: convertToUnit(props.contentTop),
+        left: convertToUnit(props.contentLeft)
+      }
+    })
     
     onMounted(() => {
-        setCurrentLeft(leftBoundary.value)
+      setCurrentLeft(leftBoundary.value)
     })
     return {
       cardStyle,
+      contentStyle,
       state,
       canShow,
     }
