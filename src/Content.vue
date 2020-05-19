@@ -12,7 +12,6 @@
       :key="i"
       :src="item"
       v-on:load="onLoad"
-      style="filter: blur(20px); visibility: hidden"
     />
     <spy-card
       v-for="(pos, i) in positions"
@@ -26,6 +25,7 @@
       :content-width="state.elWidth"
       :left-boundary="state.leftBoundary"
       :right-boundary="state.rightBoundary"
+      @hovercard:emits="hoverCard"
     >
       <keep-alive>
         <component
@@ -38,6 +38,8 @@
         <component v-else :is="pos.compo"></component>
       </keep-alive>
     </spy-card>
+
+    <div class="spy-back" :style="backStyle"></div>
   </main>
 </template>
 
@@ -45,7 +47,7 @@
 import { computed, watch, reactive } from 'vue'
 import SpyCard from './components/SpyCard';
 import SpyImage from './components/SpyImage';
-import { on, off, pos as positions } from './helpers'
+import { on, off, pos as positions, convertToUnit } from './helpers'
 import * as details from './components/details';
 // const positions = Array.from(new Array(20), () => ({left: Math.random() * 100, top: Math.random() * 100}))
 export default {
@@ -91,11 +93,20 @@ export default {
       moveX: 0,
       left: 0,
       percent: 0,
-      elWidth: 0
+      elWidth: 0,
+      imageHeight: 0
+    })
+    const backStyle = computed(() => {
+      const imageWidth = state.imageHeight * 16 / 9
+      return {
+        'background-position-x': `0, ${convertToUnit(imageWidth)}, ${convertToUnit(imageWidth * 2)}, ${convertToUnit(imageWidth * 3)}, ${convertToUnit(imageWidth * 4)}`
+
+      }
     })
     const mainStyle = computed(() => {
+      
       return {
-        transform: `translateX(${state.moveX}px)`
+        transform: `translateX(${state.moveX}px)`,
       }
     })
 
@@ -179,11 +190,13 @@ export default {
     // })
     return {
       mainStyle,
+      backStyle,
       state
     }
   },
   mounted() {
     this.addEventListner()
+    this.state.imageHeight = document.querySelector('.spy-content__image').offsetHeight
   },
   beforeUnmount() {
     this.removeEventListner()
@@ -197,6 +210,9 @@ export default {
     }
   },
   methods: {
+    hoverCard(left) {
+      console.log(left)
+    },
     onLoad() {
       this.pictureCounts += 1
     },

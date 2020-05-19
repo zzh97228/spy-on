@@ -1,6 +1,5 @@
 @import './variables.less';
 @import './card.less';
-@import './glass.less';
 body,
 html {
   margin: 0;
@@ -123,14 +122,12 @@ html {
   }
 }
 
-.spy-content {
-  overflow: hidden;
+.spy-back {
   position: absolute;
-  top: 0;
-  left: 0;
-  min-width: 100vw;
-  display: flex;
+  width: 100%;
   height: 100%;
+  left: 0;
+  top: 0;
   background-attachment: fixed;
   background-size: auto 100%;
   background-image: url('https://cdn.lagabu.com/factory/factory-1.png'),
@@ -139,6 +136,17 @@ html {
     url('https://cdn.lagabu.com/factory/factory-4.png'),
     url('https://cdn.lagabu.com/factory/factory-5.png');
   background-repeat: no-repeat;
+  filter: blur(10px);
+}
+
+.spy-content {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100vw;
+  display: flex;
+  height: 100%;
   // background: linear-gradient(
   //   to right,
   //   red,
@@ -152,6 +160,7 @@ html {
   // );
 
   &__image {
+    z-index: 2;
     height: 100%;
   }
 

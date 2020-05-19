@@ -4,8 +4,9 @@
       <div
         v-show="canShow"
         class="spy-card"
-        @mouseenter="() => this.state.showContent = true"
-        @mouseleave="() => this.state.showContent = false"
+        @mouseenter="showCard"
+        @mouseleave="hideCard"
+        @click="clickCard"
         :style="{...cardStyle}"
       >
         <div class="spy-card-media">
@@ -46,7 +47,7 @@ export default {
     },
     ...SizeComposition.sizeProps
   },
-  setup(props) {
+  setup(props, { emit }) {
     const state = reactive({
       left: isNaN(props.left) ? 0 : clamp(+props.left, 0, 100),
       top: isNaN(props.top) ? 0 : clamp(+props.top, 0, 100),
@@ -88,12 +89,27 @@ export default {
     onMounted(() => {
       setCurrentLeft(leftBoundary.value)
     })
+
+    function showCard() {
+      state.showContent = true
+      emit('hovercard:emits', state.left)
+    }
+    function hideCard() {
+      state.showContent = false
+    }
+    function clickCard() {
+      state.showContent = !state.showContent
+    }
+
     return {
       sizeStyle,
       cardStyle,
       contentStyle,
       state,
       canShow,
+      hideCard,
+      showCard,
+      clickCard
     }
   }
 }
