@@ -6,17 +6,19 @@
     <teleport to="#app">
       <div class="spy-content__activator right" ref="rightActivator"></div>
     </teleport>
-
     <img
       class="spy-content__image"
       v-for="(item, i) in pictures"
       :key="i"
       :src="item"
       v-on:load="onLoad"
+      style="filter: blur(20px); visibility: hidden"
     />
     <spy-card
       v-for="(pos, i) in positions"
       :key="i"
+      :width="pos.width"
+      :height="pos.height"
       :top="pos.top"
       :left="pos.left"
       :content-top="pos.contentTop"
@@ -26,7 +28,14 @@
       :right-boundary="state.rightBoundary"
     >
       <keep-alive>
-        <component :is="pos.compo"></component>
+        <component
+          v-if="pos.isImage"
+          :is="'SpyImage'"
+          :src="pos.src"
+          :width="pos.mediaWidth"
+          @loaded="onLoad"
+        ></component>
+        <component v-else :is="pos.compo"></component>
       </keep-alive>
     </spy-card>
   </main>
@@ -35,6 +44,7 @@
 <script>
 import { computed, watch, reactive } from 'vue'
 import SpyCard from './components/SpyCard';
+import SpyImage from './components/SpyImage';
 import { on, off, pos as positions } from './helpers'
 import * as details from './components/details';
 // const positions = Array.from(new Array(20), () => ({left: Math.random() * 100, top: Math.random() * 100}))
@@ -53,6 +63,7 @@ export default {
   },
   components: {
     SpyCard,
+    SpyImage,
     ...details
   },
   data() {
@@ -179,7 +190,9 @@ export default {
   },
   watch: {
     pictureCounts(val) {
-      const totalCount = this.pictures.length
+      const totalCount = this.pictures.length + this.positions.filter(p => p.isImage).length
+            console.log(totalCount)
+
       this.$emit('loading', { value: val, totalCount })
     }
   },

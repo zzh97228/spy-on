@@ -9,7 +9,7 @@
         :style="{...cardStyle}"
       >
         <div class="spy-card-media">
-          <div class="spy-card-media__wrapper">
+          <div class="spy-card-media__wrapper" :style="sizeStyle">
             <slot name="media"></slot>
           </div>
         </div>
@@ -17,15 +17,7 @@
         <transition name="fade-opacity-transform">
           <div v-show="state.showContent" class="spy-card-content">
             <div class="spy-card-content__wrapper" :style="{...contentStyle}">
-              <slot v-if="$slots.default"></slot>
-              <div v-else class="spy-row spy-row--align-center">
-                <div class="spy-default-avatar"></div>
-                <div class="spy-row spy-row--column">
-                  <div class="spy-default-list-item"></div>
-                  <div class="spy-default-list-item"></div>
-                  <div class="spy-default-list-item"></div>
-                </div>
-              </div>
+              <slot></slot>
             </div>
           </div>
         </transition>
@@ -81,7 +73,6 @@ export default {
     const { style: sizeStyle } = SizeComposition.useSize(props) 
     const cardStyle = computed(() => {
       return {
-        ...sizeStyle.value,
         left: `${currentLeft.value}%`,
         top: `${state.top}%`
       }
@@ -98,6 +89,7 @@ export default {
       setCurrentLeft(leftBoundary.value)
     })
     return {
+      sizeStyle,
       cardStyle,
       contentStyle,
       state,
