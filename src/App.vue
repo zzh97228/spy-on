@@ -48,7 +48,7 @@ export default {
       if (value === totalCount) {
         setTimeout(() => {
           this.loaded = true
-        }, 0)
+        }, 2000)
       }
     },
     updateLeft() {

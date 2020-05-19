@@ -37,6 +37,9 @@ export const pos = [
     // 1
     left: 21,
     top: 53,
+    contentTop: -200,
+    contentLeft: 100,
+    compo: 'Detail1',
   },
   {
     // 2
@@ -50,11 +53,17 @@ export const pos = [
     // 2-2
     left: 25.35,
     top: 39,
+    contentTop: -200,
+    contentLeft: -300,
+    compo: 'Detail22',
   },
   {
     // 2-1
     left: 27.5,
     top: 36.6,
+    contentTop: -280,
+    contentLeft: -350,
+    compo: 'Detail21',
   },
   {
     // 2-3

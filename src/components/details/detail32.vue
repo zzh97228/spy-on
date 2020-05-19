@@ -1,5 +1,5 @@
 <template>
-  <div class="spy-row spy-row---column">
+  <div class="spy-row spy-row---column" style="min-width: 600px">
     <div class="spy-title">(2)用户被动收取的信息</div>
     <ol>
       <li class="spy-text" v-for="(l, i) in list" :key="i">{{ l }}</li>
