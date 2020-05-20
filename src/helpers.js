@@ -1,13 +1,24 @@
-import kuishi21 from './assets/kuishi21.png';
-import kuishi22 from './assets/kuishi22.png';
-import kuishi23 from './assets/kuishi23.png';
-import kuishi24 from './assets/kuishi24.png';
-import kuishi25 from './assets/kuishi25.png';
-import kuishi26 from './assets/kuishi26.png';
-import kuishi27 from './assets/kuishi27.png';
-import kuishi28 from './assets/kuishi28.png';
-import kuishi29 from './assets/kuishi29.png';
-import kuishi30 from './assets/kuishi30.png';
+// import kuishi21 from './assets/kuishi21.png';
+// import kuishi22 from './assets/kuishi22.png';
+// import kuishi23 from './assets/kuishi23.png';
+// import kuishi24 from './assets/kuishi24.png';
+// import kuishi25 from './assets/kuishi25.png';
+// import kuishi26 from './assets/kuishi26.png';
+// import kuishi27 from './assets/kuishi27.png';
+// import kuishi28 from './assets/kuishi28.png';
+// import kuishi29 from './assets/kuishi29.png';
+// import kuishi30 from './assets/kuishi30.png';
+
+const kuishi21 = 'https://cdn.lagabu.com/factory/kuishi21.png';
+const kuishi22 = 'https://cdn.lagabu.com/factory/kuishi22.png';
+const kuishi23 = 'https://cdn.lagabu.com/factory/kuishi23.png';
+const kuishi24 = 'https://cdn.lagabu.com/factory/kuishi24.png';
+const kuishi25 = 'https://cdn.lagabu.com/factory/kuishi25.png';
+const kuishi26 = 'https://cdn.lagabu.com/factory/kuishi26.png';
+const kuishi27 = 'https://cdn.lagabu.com/factory/kuishi27.png';
+const kuishi28 = 'https://cdn.lagabu.com/factory/kuishi28.png';
+const kuishi29 = 'https://cdn.lagabu.com/factory/kuishi29.png';
+const kuishi30 = 'https://cdn.lagabu.com/factory/kuishi30.png';
 
 export function convertToUnit(str, unit = 'px') {
   if (str == null || str == '') return null;
