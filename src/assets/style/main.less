@@ -122,23 +122,29 @@ html {
   }
 }
 
-.spy-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  background-attachment: fixed;
-  background-size: auto 100%;
-  background-image: url('https://cdn.lagabu.com/factory/factory-1.png'),
-    url('https://cdn.lagabu.com/factory/factory-2.png'),
-    url('https://cdn.lagabu.com/factory/factory-3.png'),
-    url('https://cdn.lagabu.com/factory/factory-4.png'),
-    url('https://cdn.lagabu.com/factory/factory-5.png');
-  background-repeat: no-repeat;
-  filter: blur(10px);
+// .spy-back {
+//   position: absolute;
+//   width: 100%;
+//   height: 100%;
+//   left: 0;
+//   top: 0;
+//   background-attachment: fixed;
+//   background-size: auto 100%;
+//   background-image: url('https://cdn.lagabu.com/factory/factory-1.png'),
+//     url('https://cdn.lagabu.com/factory/factory-2.png'),
+//     url('https://cdn.lagabu.com/factory/factory-3.png'),
+//     url('https://cdn.lagabu.com/factory/factory-4.png'),
+//     url('https://cdn.lagabu.com/factory/factory-5.png');
+//   background-repeat: no-repeat;
+//   filter: blur(10px);
+// }
+.spy-image {
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  box-shadow: 0 3.2px 7.2px 0 rgba(0, 0, 0, 0.132),
+    0 0.6px 1.8px 0 rgba(0, 0, 0, 0.108);
 }
-
 .spy-content {
   overflow: hidden;
   position: absolute;
@@ -160,8 +166,47 @@ html {
   // );
 
   &__image {
+    height: 100%;
+    position: absolute;
+  }
+  &__image--wrapper {
     z-index: 2;
     height: 100%;
+    position: relative;
+    &::after {
+      transition: all 0.5s ease-in-out;
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      z-index: -1;
+      background-size: cover;
+    }
+    &-pic0::after {
+      background-image: url('https://cdn.lagabu.com/factory/factory-1.png');
+    }
+    &-pic1::after {
+      background-image: url('https://cdn.lagabu.com/factory/factory-2.png');
+    }
+    &-pic2::after {
+      background-image: url('https://cdn.lagabu.com/factory/factory-3.png');
+    }
+
+    &-pic3::after {
+      background-image: url('https://cdn.lagabu.com/factory/factory-4.png');
+    }
+
+    &-pic4::after {
+      background-image: url('https://cdn.lagabu.com/factory/factory-5.png');
+    }
+
+    &-filter::after {
+      opacity: 0.9;
+      filter: blur(20px);
+    }
   }
 
   &__activator {

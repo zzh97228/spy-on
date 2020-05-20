@@ -6,13 +6,10 @@
     <teleport to="#app">
       <div class="spy-content__activator right" ref="rightActivator"></div>
     </teleport>
-    <img
-      class="spy-content__image"
-      v-for="(item, i) in pictures"
-      :key="i"
-      :src="item"
-      v-on:load="onLoad"
-    />
+    <div :class="wrapperClasses(i)" v-for="(item, i) in pictures" :key="i" :style="imgWrapperStyle">
+      <img class="spy-content__image" :src="item" :ref="`img-${i}`" v-on:load="onLoad" />
+    </div>
+
     <spy-card
       v-for="(pos, i) in positions"
       :key="i"
@@ -26,6 +23,7 @@
       :left-boundary="state.leftBoundary"
       :right-boundary="state.rightBoundary"
       @hovercard:emits="hoverCard"
+      @hovercard:leave="hoverCardLeave"
     >
       <keep-alive>
         <component
@@ -38,13 +36,11 @@
         <component v-else :is="pos.compo"></component>
       </keep-alive>
     </spy-card>
-
-    <div class="spy-back" :style="backStyle"></div>
   </main>
 </template>
 
 <script>
-import { computed, watch, reactive } from 'vue'
+import { computed, watch, reactive, toRef } from 'vue'
 import SpyCard from './components/SpyCard';
 import SpyImage from './components/SpyImage';
 import { on, off, pos as positions, convertToUnit } from './helpers'
@@ -79,7 +75,8 @@ export default {
 
       ],
       pictureCounts: 0,
-      positions
+      positions,
+      filtering: false
     }
   },
   setup(props, { emit }) {
@@ -94,15 +91,21 @@ export default {
       left: 0,
       percent: 0,
       elWidth: 0,
-      imageHeight: 0
+      imageHeight: 0,
+      imageWidth: 0,
+      hoverImageIdx: -1,
+      hoverLeft: 0,
+      hoverTop: 0,
+      hoverWidth: 0,
+      hoverHeight: 0
     })
-    const backStyle = computed(() => {
-      const imageWidth = state.imageHeight * 16 / 9
+    const imgWrapperStyle = computed(() => {
       return {
-        'background-position-x': `0, ${convertToUnit(imageWidth)}, ${convertToUnit(imageWidth * 2)}, ${convertToUnit(imageWidth * 3)}, ${convertToUnit(imageWidth * 4)}`
-
+        width: convertToUnit(state.imageWidth),
+        height: convertToUnit(state.imageHeight)
       }
     })
+    
     const mainStyle = computed(() => {
       
       return {
@@ -171,6 +174,7 @@ export default {
     watch(() => state.percent, (val) => {
       emit('update:percent', val)
     })
+   
 
     watch(() => props.disabled, (val) => {
       if (!val) {
@@ -180,6 +184,7 @@ export default {
         setPercentAndBoundary(state.left)
       }
     })
+
     // onMounted(() => {
     //   nextTick(() => {
     //     if (!state.contentEl) return
@@ -189,14 +194,27 @@ export default {
     //   })
     // })
     return {
+      imgWrapperStyle,
       mainStyle,
-      backStyle,
-      state
+      state,
+      hoverImageIdx: toRef(state, 'hoverImageIdx')
+    }
+  },
+  computed: {
+    wrapperClasses() {
+      return (idx) => {
+        return {
+          'spy-content__image--wrapper': true,
+          'spy-content__image--wrapper-filter': this.filtering,
+          [`spy-content__image--wrapper-pic${idx}`]: idx !== undefined
+        }
+      }
     }
   },
   mounted() {
     this.addEventListner()
     this.state.imageHeight = document.querySelector('.spy-content__image').offsetHeight
+    this.state.imageWidth = this.state.imageHeight * 16 / 9
   },
   beforeUnmount() {
     this.removeEventListner()
@@ -204,14 +222,55 @@ export default {
   watch: {
     pictureCounts(val) {
       const totalCount = this.pictures.length + this.positions.filter(p => p.isImage).length
-            console.log(totalCount)
-
       this.$emit('loading', { value: val, totalCount })
+    },
+    hoverImageIdx(idx) {
+      if (idx < 0)  {
+        this.pictures.forEach((_, index) => {
+          const el = this.$refs[`img-${index}`]
+          if (!el) return
+          el.style.setProperty('clip', 'unset')
+          el.style.setProperty('visibility', '')
+
+        })
+        this.filtering = false
+
+        return
+      }
+      const el = this.$refs[`img-${idx}`]
+      if (!el) return
+      const left = this.state.hoverLeft,
+       top = this.state.hoverTop,
+       width = this.state.hoverWidth,
+       height = this.state.hoverHeight;
+      const clip = `rect(${convertToUnit(top)}, ${convertToUnit(left + width)}, ${convertToUnit(top + height)}, ${convertToUnit(left)})`
+      // const clip = `rect(${convertToUnit(left)}, ${convertToUnit(left + 50)}, 200px, ${convertToUnit(left)})`
+      el.style.setProperty('clip', clip)
+      this.pictures.forEach((_, index)=> {
+          const el = this.$refs[`img-${index}`]
+          if (!el || index === idx) return
+          el.style.setProperty('visibility', 'hidden')
+      })
+      this.filtering = true
     }
   },
   methods: {
-    hoverCard(left) {
-      console.log(left)
+    hoverCardLeave() {
+      this.state.hoverImageIdx = -1
+    },
+    hoverCard({left, top, width, height}) {
+      const img = document.querySelector('.spy-content__image')
+      const imgWidth = img.offsetWidth
+      if (!imgWidth) return
+      const currLeft = left * this.state.elWidth / 100
+      const imgIdx = Math.ceil(currLeft / imgWidth) - 1
+      const imgLeft = currLeft % imgWidth
+
+      this.state.hoverImageIdx = imgIdx
+      this.state.hoverLeft = imgLeft
+      this.state.hoverTop = top * this.state.imageHeight / 100
+      this.state.hoverWidth = parseInt(width)
+      this.state.hoverHeight = parseInt(height)
     },
     onLoad() {
       this.pictureCounts += 1
@@ -263,7 +322,6 @@ export default {
        this.setAtBoundary(false, false)
     },
     resize() {
-
     },
     addEventListner() {
       const el = this.$refs['content']

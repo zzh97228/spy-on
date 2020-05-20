@@ -1,5 +1,7 @@
 <template>
-  <img :style="styles" :src="src" alt v-on:load="onLoad" />
+  <div class="spy-image">
+    <img :style="styles" :src="src" alt v-on:load="onLoad" />
+  </div>
 </template>
 <script>
 import { convertToUnit } from '../helpers'
@@ -12,7 +14,7 @@ export default {
   computed: {
     styles() {
       return {
-        width: convertToUnit(this.width)
+        width: convertToUnit(this.width),
       }
     }
   },

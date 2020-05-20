@@ -1,15 +1,13 @@
 <template>
   <teleport to="#app">
     <transition name="fade-opacity">
-      <div
-        v-show="canShow"
-        class="spy-card"
-        @mouseenter="showCard"
-        @mouseleave="hideCard"
-        @click="clickCard"
-        :style="{...cardStyle}"
-      >
-        <div class="spy-card-media">
+      <div v-show="canShow" class="spy-card" :style="{...cardStyle}">
+        <div
+          class="spy-card-media"
+          @mouseenter="showCard"
+          @mouseleave="hideCard"
+          @click="clickCard"
+        >
           <div class="spy-card-media__wrapper" :style="sizeStyle">
             <slot name="media"></slot>
           </div>
@@ -47,6 +45,7 @@ export default {
     },
     ...SizeComposition.sizeProps
   },
+  inheritAttrs: false,
   setup(props, { emit }) {
     const state = reactive({
       left: isNaN(props.left) ? 0 : clamp(+props.left, 0, 100),
@@ -92,10 +91,12 @@ export default {
 
     function showCard() {
       state.showContent = true
-      emit('hovercard:emits', state.left)
+      emit('hovercard:emits', {left: state.left, top: state.top, width: this.sizeStyle.width, height: this.sizeStyle.height})
     }
     function hideCard() {
       state.showContent = false
+      emit('hovercard:leave', true)
+
     }
     function clickCard() {
       state.showContent = !state.showContent
