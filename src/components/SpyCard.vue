@@ -15,7 +15,7 @@
 
         <transition name="fade-opacity-transform">
           <div v-show="state.showContent" class="spy-card-content">
-            <div class="spy-card-content__wrapper" :style="{...contentStyle}">
+            <div class="spy-card-content__wrapper" ref="content" :style="contentStyle">
               <slot></slot>
             </div>
           </div>
@@ -46,10 +46,13 @@ export default {
     ...SizeComposition.sizeProps
   },
   inheritAttrs: false,
-  setup(props, { emit }) {
+  setup(props) {
     const state = reactive({
       left: isNaN(props.left) ? 0 : clamp(+props.left, 0, 100),
       top: isNaN(props.top) ? 0 : clamp(+props.top, 0, 100),
+      contentTop: 0,
+      contentLeft: 0,
+      transform: 'translate(-50%, -50%)',
       showContent: false
     })
     const currentLeft = ref(0)
@@ -80,27 +83,23 @@ export default {
 
     const contentStyle = computed(() => {
       return {
-        top: convertToUnit(props.contentTop),
-        left: convertToUnit(props.contentLeft)
+        top: convertToUnit(state.contentTop),
+        left: convertToUnit(state.contentLeft),
+        transform: state.transform
       }
+
+      // return {
+      //   top: convertToUnit(props.contentTop),
+      //   left: convertToUnit(props.contentLeft)
+      // }
     })
     
     onMounted(() => {
       setCurrentLeft(leftBoundary.value)
     })
+   
 
-    function showCard() {
-      state.showContent = true
-      emit('hovercard:emits', {left: state.left, top: state.top, width: this.sizeStyle.width, height: this.sizeStyle.height})
-    }
-    function hideCard() {
-      state.showContent = false
-      emit('hovercard:leave', true)
-
-    }
-    function clickCard() {
-      state.showContent = !state.showContent
-    }
+    
 
     return {
       sizeStyle,
@@ -108,10 +107,48 @@ export default {
       contentStyle,
       state,
       canShow,
-      hideCard,
-      showCard,
-      clickCard
     }
+  },
+  methods: {
+     setCardPosition(e) {
+      const x = e.clientX,
+       y = e.clientY,
+       x0 = window.innerWidth / 2,
+       y0 = window.innerHeight / 2;
+      let translateX = 0, translateY = 0
+      if (x > x0 && y > y0) {
+        translateX = -100
+        translateY = -100
+      } else if (x > x0 && y < y0) {
+        translateX = -100
+        translateY = -50
+
+      } else if (x < x0 && y > y0) {
+        translateX = 10
+        translateY = -50
+
+      } 
+      this.state.transform = `translate(${translateX}%, ${translateY}%)`
+      this.state.contentTop = y
+      this.state.contentLeft =x
+
+    },
+    showCard(e) {
+      this.state.showContent = true
+      requestAnimationFrame(() => {
+        this.setCardPosition(e)
+      })
+      this.$emit('hovercard:emits', {left: this.state.left, top: this.state.top, width: this.sizeStyle.width, height: this.sizeStyle.height})
+    },
+    hideCard() {
+      this.state.showContent = false
+      this.$emit('hovercard:leave', true)
+
+    },
+    clickCard() {
+      this.state.showContent = !this.state.showContent
+    }
+
   }
 }
 </script>
