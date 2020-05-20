@@ -9,6 +9,7 @@
           @click="clickCard"
         >
           <div class="spy-card-media__wrapper" :style="sizeStyle">
+            <img :src="eye" />
             <slot name="media"></slot>
           </div>
         </div>
@@ -26,6 +27,7 @@
 </template>
 
 <script>
+import eye from '../assets/eye.svg'
 import { SizeComposition } from '../composables'
 import { computed, reactive, watch, toRef, ref, onMounted } from 'vue';
 import { clamp, convertToUnit } from '../helpers'
@@ -44,6 +46,11 @@ export default {
       default: true
     },
     ...SizeComposition.sizeProps
+  },
+  data() {
+    return {
+      eye
+    }
   },
   inheritAttrs: false,
   setup(props) {
@@ -115,7 +122,7 @@ export default {
        y = e.clientY,
        x0 = window.innerWidth / 2,
        y0 = window.innerHeight / 2;
-      let translateX = 0, translateY = 0
+      let translateX = 20, translateY = 0
       if (x > x0 && y > y0) {
         translateX = -100
         translateY = -100

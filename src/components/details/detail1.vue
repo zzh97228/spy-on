@@ -1,5 +1,5 @@
 <template>
-  <div class="spy-row spy-row--column" style="width: 800px">
+  <div class="spy-row spy-image spy-row--column" style="width: 800px">
     <div class="spy-title">收录信息</div>
     <div class="spy-text">出自于GB/T 35273-2017《信息安全技术个人信息安全规范》</div>
     <div class="spy-title">自然人基本资料</div>

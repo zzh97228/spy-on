@@ -25,16 +25,16 @@
       @hovercard:emits="hoverCard"
       @hovercard:leave="hoverCardLeave"
     >
-      <keep-alive>
-        <component
-          v-if="pos.isImage"
-          :is="'SpyImage'"
-          :src="pos.src"
-          :width="pos.mediaWidth"
-          @loaded="onLoad"
-        ></component>
-        <component v-else :is="pos.compo"></component>
-      </keep-alive>
+      <!-- <keep-alive> -->
+      <component
+        v-if="pos.isImage"
+        :is="'SpyImage'"
+        :src="pos.src"
+        :width="pos.mediaWidth"
+        @loaded="onLoad"
+      ></component>
+      <component v-else :is="pos.compo"></component>
+      <!-- </keep-alive> -->
     </spy-card>
   </main>
 </template>
@@ -243,8 +243,12 @@ export default {
        top = this.state.hoverTop,
        width = this.state.hoverWidth,
        height = this.state.hoverHeight;
-      const clip = `rect(${convertToUnit(top)}, ${convertToUnit(left + width)}, ${convertToUnit(top + height)}, ${convertToUnit(left)})`
-      // const clip = `rect(${convertToUnit(left)}, ${convertToUnit(left + 50)}, 200px, ${convertToUnit(left)})`
+       // 默认使用vh单位
+      const y1 = top - (height * window.innerHeight / 2)/ 100,
+        x1 = left + (width * window.innerHeight / 2) / 100,
+        y2 = top + (height * window.innerHeight / 2)/ 100,
+        x2 = left - (width * window.innerHeight / 2) / 100
+      const clip = `rect(${y1}px, ${x1}px, ${y2}px, ${x2}px)`
       el.style.setProperty('clip', clip)
       this.pictures.forEach((_, index)=> {
           const el = this.$refs[`img-${index}`]
