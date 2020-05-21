@@ -142,6 +142,10 @@ html {
   border-radius: 8px;
   box-shadow: 0 3.2px 7.2px 0 rgba(0, 0, 0, 0.132),
     0 0.6px 1.8px 0 rgba(0, 0, 0, 0.108);
+  flex-wrap: wrap;
+  max-height: 50vh;
+
+  overflow-y: auto;
 }
 .spy-content {
   overflow: hidden;
@@ -324,6 +328,7 @@ html {
   display: flex;
   flex-wrap: wrap;
   flex: 0 1 auto;
+  align-items: baseline;
   &--column {
     flex-direction: column;
   }
@@ -352,28 +357,31 @@ html {
 }
 
 .spy-title {
+  font-size: 16px;
   color: rgb(10, 199, 35);
 
   &--red {
+    font-size: 16px;
     color: rgb(255, 0, 104);
   }
 }
 .spy-text {
+  font-size: 1rem;
   color: white;
 }
 .spy-title,
 .spy-title--red,
 .spy-text {
-  font-size: 18px;
   font-weight: 100;
   line-height: 1.5;
   letter-spacing: 0.1em;
+  vertical-align: text-bottom;
 }
 
 ol {
   margin: 0;
   padding-left: 24px;
   li {
-    line-height: 1.5;
+    line-height: 1;
   }
 }

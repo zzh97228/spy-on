@@ -2,10 +2,10 @@
 @keyframes breathe {
   0%,
   100% {
-    filter: drop-shadow(-4px 4px 8px @light-blue) blur(2px) brightness(120%);
+    filter: drop-shadow(-4px 4px 8px #f6d198) blur(2px) brightness(120%);
   }
   50% {
-    filter: drop-shadow(2px -2px 4px rgba(0, 0, 255, 0.5));
+    filter: drop-shadow(2px -2px 4px rgba(0, 255, 255, 0.5));
   }
 }
 
@@ -21,7 +21,7 @@
 
   &-media {
     flex: 0 1 auto;
-    z-index: 1;
+    z-index: 2;
     transform: translate(-50%, -50%);
     &__wrapper {
       min-height: 24px;
@@ -37,11 +37,12 @@
       align-items: center;
       transition: 0.35s ease;
 
-      img {
+      svg {
         width: 4vh;
         height: 4vh;
         z-index: 1;
         animation: breathe 2000ms infinite;
+        fill: #f6d198;
       }
       // &::before {
       //   content: '!';

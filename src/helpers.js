@@ -8,7 +8,7 @@
 // import kuishi28 from './assets/kuishi28.png';
 // import kuishi29 from './assets/kuishi29.png';
 // import kuishi30 from './assets/kuishi30.png';
-
+import { defineComponent, h } from 'vue';
 const kuishi21 = 'https://cdn.lagabu.com/factory/kuishi21.png';
 const kuishi22 = 'https://cdn.lagabu.com/factory/kuishi22.png';
 const kuishi23 = 'https://cdn.lagabu.com/factory/kuishi23.png';
@@ -36,6 +36,48 @@ export function off(el, eventName, callback = () => {}, options = false) {
 
 export function clamp(num, min, max) {
   return Math.max(Math.min(num, max), min);
+}
+
+export function createSimpleDetailComponents(
+  name = '',
+  title = '',
+  text = [],
+  width = '30vw'
+) {
+  return defineComponent({
+    name: name || 'SimpleDetail',
+    render() {
+      const textArray = text.map((t, index) => {
+        return h('li', { key: index }, [
+          h('span', { class: 'spy-text' }, t.split('——')[0] + '——'),
+          h('span', { class: 'spy-title' }, t.split('——')[1]),
+        ]);
+      });
+
+      const titleDiv = () =>
+        h(
+          'div',
+          {
+            class: 'spy-title--red',
+            style: {
+              'padding-left': '24px',
+            },
+          },
+          title || ''
+        );
+      const ol = () => h('ol', textArray);
+      return h(
+        'div',
+        {
+          class: 'spy-row spy-image',
+          style: {
+            'max-width': width,
+          },
+        },
+        [titleDiv(), ol()]
+      );
+    },
+  });
 }
 
 export const pos = [
@@ -124,6 +166,7 @@ export const pos = [
     top: 39.2,
     width: '20vh',
     height: '20vh',
+    compo: 'Detail5',
   },
   {
     // 8
@@ -131,6 +174,7 @@ export const pos = [
     top: 57.7,
     width: '15vh',
     height: '15vh',
+    compo: 'Detail8',
   },
   {
     // 4
@@ -138,6 +182,7 @@ export const pos = [
     top: 54.2,
     width: '20vh',
     height: '25vh',
+    compo: 'Detail4',
   },
   {
     // 2-4
@@ -157,6 +202,7 @@ export const pos = [
     top: 43.8,
     width: '35vh',
     height: '35vh',
+    compo: 'Detail12',
   },
   {
     // 11
@@ -164,6 +210,7 @@ export const pos = [
     top: 30,
     width: '20vh',
     height: '20vh',
+    compo: 'Detail11',
   },
   {
     // 27
@@ -183,6 +230,7 @@ export const pos = [
     top: 47.5,
     width: '25vh',
     height: '25vh',
+    compo: 'Detail6',
   },
   {
     // 17
@@ -197,6 +245,7 @@ export const pos = [
     top: 56.7,
     width: '20vh',
     height: '20vh',
+    compo: 'Detail13',
   },
   {
     // 25
@@ -228,6 +277,7 @@ export const pos = [
     top: 53.1,
     width: '20vh',
     height: '20vh',
+    compo: 'Detail7',
   },
   {
     // 29
@@ -247,6 +297,7 @@ export const pos = [
     top: 52.4,
     width: '25vh',
     height: '30vh',
+    compo: 'Detail9',
   },
   {
     // 19
@@ -273,6 +324,7 @@ export const pos = [
     top: 48.4,
     width: '35vh',
     height: '20vh',
+    compo: 'Detail10',
   },
   {
     // 20

@@ -12,7 +12,9 @@
 
     <spy-card
       v-for="(pos, i) in positions"
+      :current-idx="currentIdx"
       :key="i"
+      :idx="i"
       :width="pos.width"
       :height="pos.height"
       :top="pos.top"
@@ -76,7 +78,8 @@ export default {
       ],
       pictureCounts: 0,
       positions,
-      filtering: false
+      filtering: false,
+      currentIdx: -1
     }
   },
   setup(props, { emit }) {
@@ -209,6 +212,10 @@ export default {
           [`spy-content__image--wrapper-pic${idx}`]: idx !== undefined
         }
       }
+    },
+    showCard() {
+      if (this.currentIdx < 0) return () => true
+      return (val) => val === this.currentIdx
     }
   },
   mounted() {
@@ -260,9 +267,11 @@ export default {
   },
   methods: {
     hoverCardLeave() {
+      this.currentIdx = -1
       this.state.hoverImageIdx = -1
     },
-    hoverCard({left, top, width, height}) {
+    hoverCard({left, top, width, height, idx}) {
+      this.currentIdx = idx
       const img = document.querySelector('.spy-content__image')
       const imgWidth = img.offsetWidth
       if (!imgWidth) return

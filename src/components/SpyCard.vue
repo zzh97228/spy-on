@@ -1,19 +1,14 @@
 <template>
   <teleport to="#app">
     <transition name="fade-opacity">
-      <div v-show="canShow" class="spy-card" :style="{...cardStyle}">
-        <div
-          class="spy-card-media"
-          @mouseenter="showCard"
-          @mouseleave="hideCard"
-          @click="clickCard"
-        >
-          <div class="spy-card-media__wrapper" :style="sizeStyle">
-            <img :src="eye" />
-            <slot name="media"></slot>
-          </div>
-        </div>
-
+      <div
+        v-show="canShow"
+        class="spy-card"
+        @mouseenter="showCard"
+        @mouseleave="hideCard"
+        @click="clickCard"
+        :style="{...cardStyle}"
+      >
         <transition name="fade-opacity-transform">
           <div v-show="state.showContent" class="spy-card-content">
             <div class="spy-card-content__wrapper" ref="content" :style="contentStyle">
@@ -21,13 +16,37 @@
             </div>
           </div>
         </transition>
+
+        <div class="spy-card-media">
+          <div class="spy-card-media__wrapper" :style="sizeStyle">
+            <svg
+              t="1589978743563"
+              class="icon"
+              viewBox="0 0 1024 1024"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              p-id="1278"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              width="200"
+              height="200"
+            >
+              <defs>
+                <style type="text/css" />
+              </defs>
+              <path
+                d="M512 170.666667C298.666667 170.666667 116.48 303.36 42.666667 490.666667 116.48 677.973333 298.666667 810.666667 512 810.666667s395.52-132.693333 469.333333-320C907.52 303.36 725.333333 170.666667 512 170.666667z m0 533.333333c-117.76 0-213.333333-95.573333-213.333333-213.333333s95.573333-213.333333 213.333333-213.333334 213.333333 95.573333 213.333333 213.333334-95.573333 213.333333-213.333333 213.333333z m0-341.333333c-70.826667 0-128 57.173333-128 128s57.173333 128 128 128 128-57.173333 128-128-57.173333-128-128-128z"
+                p-id="1279"
+              />
+            </svg>
+            <slot name="media"></slot>
+          </div>
+        </div>
       </div>
     </transition>
   </teleport>
 </template>
 
 <script>
-import eye from '../assets/eye.svg'
 import { SizeComposition } from '../composables'
 import { computed, reactive, watch, toRef, ref, onMounted } from 'vue';
 import { clamp, convertToUnit } from '../helpers'
@@ -45,12 +64,9 @@ export default {
       type: Boolean,
       default: true
     },
+    idx: Number,
+    currentIdx: Number,
     ...SizeComposition.sizeProps
-  },
-  data() {
-    return {
-      eye
-    }
   },
   inheritAttrs: false,
   setup(props) {
@@ -67,6 +83,9 @@ export default {
     const rightBoundary = toRef(props, 'rightBoundary');
     
     const canShow = computed(() => {
+      if (props.currentIdx >= 0) {
+        return props.idx === props.currentIdx
+      }
       return leftBoundary.value < state.left && state.left < rightBoundary.value
     })
     
@@ -122,7 +141,7 @@ export default {
        y = e.clientY,
        x0 = window.innerWidth / 2,
        y0 = window.innerHeight / 2;
-      let translateX = 20, translateY = 0
+      let translateX = 10, translateY = 0
       if (x > x0 && y > y0) {
         translateX = -100
         translateY = -100
@@ -145,7 +164,13 @@ export default {
       requestAnimationFrame(() => {
         this.setCardPosition(e)
       })
-      this.$emit('hovercard:emits', {left: this.state.left, top: this.state.top, width: this.sizeStyle.width, height: this.sizeStyle.height})
+      this.$emit('hovercard:emits', {
+        left: this.state.left, 
+        top: this.state.top, 
+        width: this.sizeStyle.width, 
+        height: this.sizeStyle.height,
+        idx: this.idx
+      })
     },
     hideCard() {
       this.state.showContent = false
