@@ -3,6 +3,15 @@ import Detail31 from './detail31.vue';
 import Detail32 from './detail32.vue';
 import Detail2 from './detail2.vue';
 import Detail1 from './detail1.vue';
+import Detail14 from './detail14.vue';
+import Detail16 from './detail16.vue';
+
+import Detail17 from './detail17.vue';
+
+import Detail18 from './detail18.vue';
+import Detail19 from './detail19.vue';
+import Detail20 from './detail20.vue';
+
 const Detail5 = createSimpleDetailComponents('Detail5', '社交娱乐', [
   '账号昵称、手机号码或电子邮箱——注册账号',
   '设备信息、日志信息、搜索内容、浏览记录、浏览时间——搜索',
@@ -118,4 +127,10 @@ export {
   Detail7,
   Detail9,
   Detail10,
+  Detail14,
+  Detail16,
+  Detail17,
+  Detail18,
+  Detail19,
+  Detail20,
 };

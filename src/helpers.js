@@ -238,6 +238,7 @@ export const pos = [
     top: 29.3,
     width: '15vh',
     height: '15vh',
+    compo: 'Detail17',
   },
   {
     // 13
@@ -305,6 +306,7 @@ export const pos = [
     top: 22.1,
     width: '20vh',
     height: '30vh',
+    compo: 'Detail19',
   },
   {
     // 30
@@ -332,6 +334,7 @@ export const pos = [
     top: 66.5,
     width: '25vh',
     height: '25vh',
+    compo: 'Detail20',
   },
   {
     // 28
@@ -351,6 +354,7 @@ export const pos = [
     top: 15.8,
     width: '10vh',
     height: '10vh',
+    compo: 'Detail14',
   },
   {
     // 15
@@ -358,6 +362,7 @@ export const pos = [
     top: 15.8,
     width: '10vh',
     height: '10vh',
+    compo: 'Detail14',
   },
   {
     // 18
@@ -365,6 +370,7 @@ export const pos = [
     top: 52.2,
     width: '35vh',
     height: '25vh',
+    compo: 'Detail18',
   },
   {
     // 16
@@ -372,5 +378,6 @@ export const pos = [
     top: 14.1,
     width: '20vh',
     height: '20vh',
+    compo: 'Detail16',
   },
 ];
