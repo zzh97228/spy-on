@@ -1,14 +1,7 @@
 <template>
   <teleport to="#app">
     <transition name="fade-opacity">
-      <div
-        v-show="canShow"
-        class="spy-card"
-        @mouseenter="showCard"
-        @mouseleave="hideCard"
-        @click="clickCard"
-        :style="{...cardStyle}"
-      >
+      <div v-show="canShow" class="spy-card" @click="clickCard" :style="{...cardStyle}">
         <transition name="fade-opacity-transform">
           <div v-show="state.showContent" class="spy-card-content">
             <div class="spy-card-content__wrapper" ref="content" :style="contentStyle">
@@ -137,24 +130,25 @@ export default {
   },
   methods: {
      setCardPosition(e) {
-      const x = e.clientX,
-       y = e.clientY,
-       x0 = window.innerWidth / 2,
-       y0 = window.innerHeight / 2;
-      let translateX = 10, translateY = 0
-      if (x > x0 && y > y0) {
-        translateX = -100
-        translateY = -100
-      } else if (x > x0 && y < y0) {
-        translateX = -100
-        translateY = -50
+      let x = e.clientX,
+       y = e.clientY
+      // const x0 = window.innerWidth / 2,
+      //  y0 = window.innerHeight / 2,
+      const windowWidth = window.innerWidth || document.documentElement.offsetWidth
+      x = x < (windowWidth / 2) ? '75vw' : '25vw'
+      // let translateX = 10, translateY = 0
+      // if (x > x0 && y > y0) {
+      //   translateX = -100
+      //   translateY = -100
+      // } else if (x > x0 && y < y0) {
+      //   translateX = -100
+      //   translateY = -50
 
-      } else if (x < x0 && y > y0) {
-        translateX = 10
-        translateY = -50
-
-      } 
-      this.state.transform = `translate(${translateX}%, ${translateY}%)`
+      // } else if (x < x0 && y > y0) {
+      //   translateX = 10
+      //   translateY = -50
+      // } 
+      // this.state.transform = `translate(${translateX}%, ${translateY}%)`
       this.state.contentTop = y
       this.state.contentLeft =x
 
@@ -177,8 +171,13 @@ export default {
       this.$emit('hovercard:leave', true)
 
     },
-    clickCard() {
+    clickCard(e) {
       this.state.showContent = !this.state.showContent
+      if (this.state.showContent) {
+        this.showCard(e)
+      } else {
+        this.hideCard()
+      }
     }
 
   }

@@ -298,7 +298,7 @@ export default {
       const windowWidth = window.innerWidth || document.documentElement.offsetWidth
       const leftBoundary = windowWidth * 0.1;
       const rightBoundary = windowWidth * 0.9;
-      
+      if (this.filtering) return
       if (x < leftBoundary) {
         this.state.x = x
         this.setAtBoundary(true, false)
