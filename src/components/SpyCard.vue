@@ -1,16 +1,24 @@
 <template>
   <teleport to="#app">
     <transition name="fade-opacity">
-      <div v-show="canShow" class="spy-card" @click="clickCard" :style="{...cardStyle}">
+      <div v-show="canShow" class="spy-card" ref="card" :style="{...cardStyle}">
         <transition name="fade-opacity-transform">
-          <div v-show="state.showContent" class="spy-card-content">
-            <div class="spy-card-content__wrapper" ref="content" :style="contentStyle">
+          <div v-show="state.showContent" ref="content" class="spy-card-content">
+            <div class="spy-card-content__wrapper" :style="contentStyle">
               <slot></slot>
             </div>
           </div>
         </transition>
 
-        <div class="spy-card-media">
+        <div
+          class="spy-card-media"
+          @click="clickCard"
+          v-click-outside="{
+            fn: clickCard,
+            condition: condition,
+            includes
+          }"
+        >
           <div class="spy-card-media__wrapper" :style="sizeStyle">
             <svg
               t="1589978743563"
@@ -40,6 +48,7 @@
 </template>
 
 <script>
+import ClickOutside from '../VClickOutside'
 import { SizeComposition } from '../composables'
 import { computed, reactive, watch, toRef, ref, onMounted } from 'vue';
 import { clamp, convertToUnit } from '../helpers'
@@ -60,6 +69,9 @@ export default {
     idx: Number,
     currentIdx: Number,
     ...SizeComposition.sizeProps
+  },
+  directives: {
+    ClickOutside
   },
   inheritAttrs: false,
   setup(props) {
@@ -178,6 +190,16 @@ export default {
       } else {
         this.hideCard()
       }
+    },
+    condition(e) {
+      const target = e.target
+      const card = this.$refs['card']
+      if (!target) return false
+      return this.state.showContent && (!card || !this.$refs['card'].contains(target))
+
+    },
+    includes() {
+      return [ this.$refs.content ]
     }
 
   }
