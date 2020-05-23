@@ -142,7 +142,7 @@ export default {
   },
   methods: {
      setCardPosition(e) {
-      let x = e.clientX, y = e.clientY ,translateX = 0, translateY = -50
+      let x = e.clientX ,translateX = 0, translateY = -50
 
       const windowWidth = window.innerWidth || document.documentElement.offsetWidth,
       windowHeight = window.innerHeight || document.documentElement.offsetHeight
@@ -153,7 +153,8 @@ export default {
       } else {
         x = 0.5 * windowWidth
       }
-      this.state.contentMaxHeight = windowHeight - 64 - y
+
+      this.state.contentMaxHeight = y0
       this.state.contentMaxWidth = .25 * windowWidth      
       this.state.transform = `translate(${translateX}%, ${translateY}%)`
       this.state.contentTop = y0

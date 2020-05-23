@@ -1,10 +1,50 @@
 <template>
   <main class="spy-content" ref="content" :style="mainStyle">
     <teleport to="#app">
-      <div class="spy-content__activator left" ref="leftActivator"></div>
+      <div class="spy-content__activator left" ref="leftActivator">
+        <svg
+          t="1590240439983"
+          class="icon"
+          viewBox="0 0 1024 1024"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          p-id="5418"
+          width="48"
+          height="48"
+        >
+          <path
+            d="M512 1024C230.4 1024 0 793.6 0 512S230.4 0 512 0s512 230.4 512 512S793.6 1024 512 1024zM512 85.333333C277.333333 85.333333 85.333333 277.333333 85.333333 512s192 426.666667 426.666667 426.666667 426.666667-192 426.666667-426.666667S746.666667 85.333333 512 85.333333z"
+            p-id="5419"
+          />
+          <path
+            d="M554.666667 682.666667c-12.8 0-21.333333-4.266667-29.866667-12.8l-128-128c-17.066667-17.066667-17.066667-42.666667 0-59.733333l128-128c17.066667-17.066667 42.666667-17.066667 59.733333 0s17.066667 42.666667 0 59.733333L486.4 512l98.133333 98.133333c17.066667 17.066667 17.066667 42.666667 0 59.733333C576 678.4 567.466667 682.666667 554.666667 682.666667z"
+            p-id="5420"
+          />
+        </svg>
+      </div>
     </teleport>
     <teleport to="#app">
-      <div class="spy-content__activator right" ref="rightActivator"></div>
+      <div class="spy-content__activator right" ref="rightActivator">
+        <svg
+          t="1590240439983"
+          class="icon"
+          viewBox="0 0 1024 1024"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          p-id="5418"
+          width="48"
+          height="48"
+        >
+          <path
+            d="M512 1024C230.4 1024 0 793.6 0 512S230.4 0 512 0s512 230.4 512 512S793.6 1024 512 1024zM512 85.333333C277.333333 85.333333 85.333333 277.333333 85.333333 512s192 426.666667 426.666667 426.666667 426.666667-192 426.666667-426.666667S746.666667 85.333333 512 85.333333z"
+            p-id="5419"
+          />
+          <path
+            d="M554.666667 682.666667c-12.8 0-21.333333-4.266667-29.866667-12.8l-128-128c-17.066667-17.066667-17.066667-42.666667 0-59.733333l128-128c17.066667-17.066667 42.666667-17.066667 59.733333 0s17.066667 42.666667 0 59.733333L486.4 512l98.133333 98.133333c17.066667 17.066667 17.066667 42.666667 0 59.733333C576 678.4 567.466667 682.666667 554.666667 682.666667z"
+            p-id="5420"
+          />
+        </svg>
+      </div>
     </teleport>
     <div :class="wrapperClasses(i)" v-for="(item, i) in pictures" :key="i" :style="imgWrapperStyle">
       <img class="spy-content__image" :src="item" :ref="`img-${i}`" v-on:load="onLoad" />
@@ -42,7 +82,7 @@
 </template>
 
 <script>
-import { computed, watch, reactive, toRef } from 'vue'
+import { computed, watch, reactive, toRef } from 'vue';
 import SpyCard from './components/SpyCard';
 import SpyImage from './components/SpyImage';
 import { on, off, pos as positions, convertToUnit } from './helpers'
