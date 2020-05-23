@@ -80,6 +80,8 @@ export default {
       top: isNaN(props.top) ? 0 : clamp(+props.top, 0, 100),
       contentTop: 0,
       contentLeft: 0,
+      contentMaxWidth: 0,
+      contentMaxHeight: 0,
       transform: 'translate(-50%, -50%)',
       showContent: false
     })
@@ -116,13 +118,11 @@ export default {
       return {
         top: convertToUnit(state.contentTop),
         left: convertToUnit(state.contentLeft),
-        transform: state.transform
+        transform: state.transform,
+        maxWidth: convertToUnit(state.contentMaxWidth * 2),
+        maxHeight: convertToUnit(state.contentMaxHeight),
+        width: convertToUnit(state.contentMaxWidth),
       }
-
-      // return {
-      //   top: convertToUnit(props.contentTop),
-      //   left: convertToUnit(props.contentLeft)
-      // }
     })
     
     onMounted(() => {
@@ -142,26 +142,21 @@ export default {
   },
   methods: {
      setCardPosition(e) {
-      let x = e.clientX,
-       y = e.clientY
-      // const x0 = window.innerWidth / 2,
-      //  y0 = window.innerHeight / 2,
-      const windowWidth = window.innerWidth || document.documentElement.offsetWidth
-      x = x < (windowWidth / 2) ? '75vw' : '25vw'
-      // let translateX = 10, translateY = 0
-      // if (x > x0 && y > y0) {
-      //   translateX = -100
-      //   translateY = -100
-      // } else if (x > x0 && y < y0) {
-      //   translateX = -100
-      //   translateY = -50
+      let x = e.clientX, y = e.clientY ,translateX = 0, translateY = -50
 
-      // } else if (x < x0 && y > y0) {
-      //   translateX = 10
-      //   translateY = -50
-      // } 
-      // this.state.transform = `translate(${translateX}%, ${translateY}%)`
-      this.state.contentTop = y
+      const windowWidth = window.innerWidth || document.documentElement.offsetWidth,
+      windowHeight = window.innerHeight || document.documentElement.offsetHeight
+      const x0 = windowWidth / 4, x1 = windowWidth / 2, x2 = windowWidth * 3 / 4
+      const y0 = windowHeight / 2
+      if ((x > 0 && x < x0) || (x >= x1 && x < x2)) {
+        x = 0.25 * windowWidth
+      } else {
+        x = 0.5 * windowWidth
+      }
+      this.state.contentMaxHeight = windowHeight - 64 - y
+      this.state.contentMaxWidth = .25 * windowWidth      
+      this.state.transform = `translate(${translateX}%, ${translateY}%)`
+      this.state.contentTop = y0
       this.state.contentLeft =x
 
     },

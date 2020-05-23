@@ -1,5 +1,5 @@
 <template>
-  <div class="spy-row spy-row--column spy-image" style="width: 600px">
+  <div class="spy-row spy-row--column spy-image">
     <div class="spy-title">个人信息保护或隐私保护</div>
     <div class="spy-row">
       <span class="spy-title">中国：</span>

@@ -1,5 +1,5 @@
 <template>
-  <div class="spy-row spy-row--column spy-image" style="width: 600px">
+  <div class="spy-row spy-row--column spy-image">
     <div class="spy-title">可能受侵犯的权利</div>
     <div class="spy-text">名誉权、知识产权、肖像权、财产权、隐私权</div>
     <div class="spy-title">用户拥有的权利</div>

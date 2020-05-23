@@ -38,12 +38,7 @@ export function clamp(num, min, max) {
   return Math.max(Math.min(num, max), min);
 }
 
-export function createSimpleDetailComponents(
-  name = '',
-  title = '',
-  text = [],
-  width = '30vw'
-) {
+export function createSimpleDetailComponents(name = '', title = '', text = []) {
   return defineComponent({
     name: name || 'SimpleDetail',
     render() {
@@ -70,9 +65,6 @@ export function createSimpleDetailComponents(
         'div',
         {
           class: 'spy-row spy-image',
-          style: {
-            'max-width': width,
-          },
         },
         [titleDiv(), ol()]
       );

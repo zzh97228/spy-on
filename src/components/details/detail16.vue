@@ -1,5 +1,5 @@
 <template>
-  <div class="spy-row spy-image spy-row--column" style="width: 400px">
+  <div class="spy-row spy-image spy-row--column">
     <div class="spy-title">例外情况</div>
     <ol>
       <li v-for="(item, i) in list" class="spy-text" :key="i">{{ item }}</li>

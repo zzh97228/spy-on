@@ -1,5 +1,5 @@
 <template>
-  <div class="spy-row spy-row--column spy-image" style="width: 600px">
+  <div class="spy-row spy-row--column spy-image">
     <div class="spy-title--red">Facebook数据泄露</div>
     <div
       class="spy-text"

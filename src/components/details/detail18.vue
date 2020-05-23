@@ -1,5 +1,5 @@
 <template>
-  <div class="spy-row spy-image spy-row--column" style="width: 600px">
+  <div class="spy-row spy-image spy-row--column">
     <div class="spy-title--red">用户自我保护建议</div>
     <div class="spy-title">（一）用户授予敏感权限应谨慎</div>
     <div class="spy-text">一是下载安装 App 时认真阅读权限提醒，谨慎开启权限。</div>

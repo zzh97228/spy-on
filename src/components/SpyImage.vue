@@ -1,6 +1,6 @@
 <template>
   <div class="spy-image">
-    <img :style="styles" :src="src" alt v-on:load="onLoad" />
+    <img :src="src" alt v-on:load="onLoad" />
   </div>
 </template>
 <script>

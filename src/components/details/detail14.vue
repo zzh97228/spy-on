@@ -1,5 +1,5 @@
 <template>
-  <div class="spy-row spy-image spy-row--column" style="width: 400px">
+  <div class="spy-row spy-image spy-row--column">
     <div class="spy-title">对象</div>
     <div class="spy-text">关联方、第三方、授权方、广告方、软件服务提供商、智能设备提供商、系统服务提供商、国家需要</div>
     <div class="spy-title">保护</div>
