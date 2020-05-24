@@ -1,9 +1,9 @@
 <template>
   <teleport to="#app">
     <transition name="fade-opacity">
-      <div v-show="canShow" class="spy-card" ref="card" :style="{...cardStyle}">
+      <div v-show="canShow" class="spy-card" ref="cardRef" :style="{...cardStyle}">
         <transition name="fade-opacity-transform">
-          <div v-show="state.showContent" ref="content" class="spy-card-content">
+          <div v-show="state.showContent" ref="contentRef" class="spy-card-content">
             <div class="spy-card-content__wrapper" :style="contentStyle">
               <slot></slot>
             </div>
@@ -85,6 +85,8 @@ export default {
       transform: 'translate(-50%, -50%)',
       showContent: false
     })
+    const cardRef = ref('card');
+    const contentRef = ref('content');
     const currentLeft = ref(0)
     const leftBoundary = toRef(props, 'leftBoundary');
     const rightBoundary = toRef(props, 'rightBoundary');
@@ -138,6 +140,8 @@ export default {
       contentStyle,
       state,
       canShow,
+      cardRef,
+      contentRef
     }
   },
   methods: {
@@ -189,13 +193,13 @@ export default {
     },
     condition(e) {
       const target = e.target
-      const card = this.$refs['card']
-      if (!target) return false
-      return this.state.showContent && (!card || !this.$refs['card'].contains(target))
+      const card = this.cardRef
+      if (!target || !card) return false
+      return this.state.showContent && !card.contains(target)
 
     },
     includes() {
-      return [ this.$refs.content ]
+      return [ this.contentRef ]
     }
 
   }
