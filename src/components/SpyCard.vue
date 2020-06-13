@@ -124,6 +124,7 @@ export default {
         maxWidth: convertToUnit(state.contentMaxWidth * 2),
         maxHeight: convertToUnit(state.contentMaxHeight),
         width: convertToUnit(state.contentMaxWidth),
+        
       }
     })
     
@@ -159,7 +160,7 @@ export default {
       }
 
       this.state.contentMaxHeight = y0
-      this.state.contentMaxWidth = .25 * windowWidth      
+      this.state.contentMaxWidth = .35 * windowWidth      
       this.state.transform = `translate(${translateX}%, ${translateY}%)`
       this.state.contentTop = y0
       this.state.contentLeft =x

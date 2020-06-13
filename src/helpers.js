@@ -348,14 +348,14 @@ export const pos = [
     height: '10vh',
     compo: 'Detail14',
   },
-  {
-    // 15
-    left: 82.1,
-    top: 15.8,
-    width: '10vh',
-    height: '10vh',
-    compo: 'Detail14',
-  },
+  // {
+  //   // 15
+  //   left: 82.1,
+  //   top: 15.8,
+  //   width: '10vh',
+  //   height: '10vh',
+  //   compo: 'Detail14',
+  // },
   {
     // 18
     left: 81.8,
